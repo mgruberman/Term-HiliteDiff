@@ -1,3 +1,4 @@
+#!perl -w
 $/ = undef;
 $_ = <DATA>;
 for my $name ( qw( watch hilite_diff ) ) {
