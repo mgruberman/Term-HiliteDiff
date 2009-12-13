@@ -3,3 +3,7 @@ Revision history for Term-HiliteDiff
 0.01    Date/time
         First version, released on an unsuspecting world.
 
+0.02    Mar 19, 2007
+        Documentation improvments
+        Removed author tests
+        Added array ref feature

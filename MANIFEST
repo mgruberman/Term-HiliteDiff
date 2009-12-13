@@ -1,14 +1,11 @@
-.cvsignore
 Changes
 lib/Term/HiliteDiff.pm
+lib/Term/HiliteDiff.pod
 lib/Term/HiliteDiff/_impl.pm
 Makefile.PL
 MANIFEST
 META.yml
 README
-SIGNATURE
-t/00signature.t
-t/03yaml.t
 t/10basic.t
 t/20hilite_diff.t
 t/20watch.t

@@ -1,0 +1,128 @@
+
+=head1 NAME
+
+Term::HiliteDiff - Highlights differences in text with ANSI escape codes
+
+=head1 DESCRIPTION
+
+Term::HiliteDiff prints or formats your input with the differences
+highlighted. You can choose to update your display in place or let
+things scroll past like following a log.
+
+You can choose to parse things for Term::HiliteDiff or let it just do
+a plain character-by-character diff. My favorites are doing diffs on
+CSV or tab delimited data.
+
+This module highlights differences between lines/records of text. It was
+directly inspired by the --difference mode provided by the watch(1)
+program on Linux.
+
+=head1 SYNOPSIS
+
+    # Prints a tab delimited file, with differences highlighted
+    use Term::HiliteDiff 'hilite_diff';
+    while ( <STDIN> ) {
+        hilite_diff( [ split /\t/ ] );
+    }
+
+=head1 CONSTRUCTOR
+
+The C<< Term::HiliteDiff->new >> constructor returns a new
+L<Term::HiliteDiff::_obj> object. It responds to the methods C<<
+->watch >> and C<< ->hilite_diff >>.
+
+=over 
+
+=item hilite_diff( ARRAY REFERENCE )
+
+=item hilite_diff( STRING, ... )
+
+The C<hilite_diff> function compares the previous input with the
+current input and prints the new input on a new line with any
+differences highlited.
+
+This function accepts either a single array reference or a list of
+strings. The difference is whether your input will be parsed or
+not. There is no parsing with an array reference. Your strings are
+split into characters if you pass in a list of strings.
+
+  while (<STDIN>) {
+      print hilite_diff( $_ );
+  }
+
+In both cases the output joining the contents of your array reference
+or the list of strings by the C<$,> variable.
+
+  # Tab delimited input
+  $, = "\t";
+  while (<STDIN>) {
+      print hilite_diff( [ split /$,/ ] );
+  }
+
+If this function is called in void context, the result will be printed
+to the currently selected filehandle. In list or scalar context the
+resultant string will just be returned.
+
+Example 1:
+
+  # prints differences to STDERR
+  while (<STDIN>) {
+      print STDERR hilite_diff( $_ );
+  }
+
+Example 2:
+
+  # prints differences to the default handle
+  while (<STDIN>) {
+      hilite_diff( $_ );
+  }
+
+=item watch( ARRAY REFERENCE )
+
+=item watch( STRING, ... )
+
+This function operates just like C<hilite_diff> with the exception
+that it attempts to always write its output over the same portion of
+screen real estate. This allows you to have output that continually
+refreshes in place.
+
+I wrote this variant of C<hilite_diff> so I could follow the changes
+inside a repeating data structure.
+
+  # Watch 'a' increment inside the structure.
+  use Data::Dumper 'Dumper';
+  my @array = ( 1, 'a', 3 );
+  while ( 1 ) {
+      ++ $array[1]
+      watch( Dumper( \ @array ) );
+  }
+
+=head1 AUTOMATIC EXPORTS
+
+The C<watch> and C<hilite_diff> functions are exported when you've
+used this module from the command line.
+
+  perl -MTerm::HiliteDiff -pe '$_ = hilite_diff( $_ )'
+
+=head1 AUTHOR
+
+Joshua ben Jore, C<< <jjore@cpan.org> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to
+C<bug-term-hilitediff@rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Term-HiliteDiff>.
+I will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.
+
+=head1 ACKNOWLEDGEMENTS
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2006 Joshua ben Jore, All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
