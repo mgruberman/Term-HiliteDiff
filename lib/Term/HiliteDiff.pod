@@ -104,19 +104,43 @@ used this module from the command line.
 
   perl -MTerm::HiliteDiff -pe '$_ = hilite_diff( $_ )'
 
+=head1 DEPENDENCIES
+
+strict, vars, Exporter, Algorithm::Diff, Test::More, ExtUtils::MakeMaker
+
+=head1 SUPPORT AND DOCUMENTATION
+
+After installing, you can find documentation for this module with the
+perldoc command.
+
+    perldoc Term::HiliteDiff
+
+You can also look for information at:
+
+=over
+
+=item RT, CPAN's request tracker L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Term-HiliteDiff>
+
+=item AnnoCPAN, Annotated CPAN documentation L<http://annocpan.org/dist/Term-HiliteDiff>
+
+=item CPAN Ratings L<http://cpanratings.perl.org/d/Term-HiliteDiff>
+
+=item Search CPAN L<http://search.cpan.org/dist/Term-HiliteDiff>
+
+=back
+
 =head1 AUTHOR
 
 Josh ben Jore, C<< <jjore@cpan.org> >>
 
-=head1 BUGS
+=end emacs
 
-Please report any bugs or feature requests to
-C<bug-term-hilitediff@rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Term-HiliteDiff>.
-I will be notified, and then you'll automatically be notified of progress on
-your bug as I make changes.
+## Local Variables:
+## mode: pod
+## mode: auto-fill
+## End:
 
-=head1 ACKNOWLEDGEMENTS
+=begin emacs
 
 =head1 COPYRIGHT & LICENSE
 
@@ -125,4 +149,3 @@ Copyright 2006 Josh ben Jore, All Rights Reserved.
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
-=cut
