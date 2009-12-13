@@ -1,0 +1,10 @@
+*~
+\#*
+blib
+pm_to_blib
+
+Makefile
+Makefile.old
+
+t/20watch.t
+t/20hilite_diff.t
