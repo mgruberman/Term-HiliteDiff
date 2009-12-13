@@ -1,11 +1,7 @@
-#!perl -T
+#!perl -wT
+use strict;
+use Test::More tests => 1;
 
-if ( eval 'use Test::More; 1' ) {
-    plan( tests => 1 );
-    use_ok('Term::HiliteDiff');
-    diag("Testing Term::HiliteDiff $Term::HiliteDiff::VERSION, Perl $], $^X");
-}
-elsif ( eval 'use Test; 1' ) {
-    plan( tests => 1 );
-    skip( 1, 1 );
-}
+BEGIN { diag("Testing Term::HiliteDiff $Term::HiliteDiff::VERSION, Perl $], $^X") }
+use Term::HiliteDiff;
+ok( 'Loaded Term::HiliteDiff' );
