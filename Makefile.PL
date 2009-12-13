@@ -14,7 +14,9 @@ WriteMakefile(
         vars              => 0,
         Exporter          => 0,
         'Algorithm::Diff' => 0,
-        Test              => 0,
+
+        # Only for testing
+        'Test::More' => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES    => 'Term-HiliteDiff-*' },
