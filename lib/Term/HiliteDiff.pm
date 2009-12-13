@@ -4,7 +4,7 @@ use strict;
 use vars qw( $VERSION @EXPORT_OK %EXPORT_TAGS );
 use Term::HiliteDiff::_impl ();
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use Exporter ();
 *import      = \&Exporter::import;

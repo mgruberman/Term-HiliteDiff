@@ -13,9 +13,9 @@ You can choose to parse things for Term::HiliteDiff or let it just do
 a plain character-by-character diff. My favorites are doing diffs on
 CSV or tab delimited data.
 
-This module highlights differences between lines/records of text. It was
-directly inspired by the --difference mode provided by the watch(1)
-program on Linux.
+This module highlights differences between subsequent lines/records of
+text. It was directly inspired by the --difference mode provided by
+the watch(1) program on Linux.
 
 =head1 SYNOPSIS
 

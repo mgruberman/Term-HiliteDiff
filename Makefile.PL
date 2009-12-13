@@ -5,7 +5,7 @@ WriteMakefile(
     NAME          => 'Term::HiliteDiff',
     AUTHOR        => 'Joshua ben Jore <twists@gmail.com>',
     VERSION_FROM  => 'lib/Term/HiliteDiff.pm',
-    ABSTRACT_FROM => 'lib/Term/HiliteDiff.pm',
+    ABSTRACT_FROM => 'lib/Term/HiliteDiff.pod',
     PL_FILES      => {},
     PREREQ_PM     => {
         strict            => 0,

@@ -1,7 +1,7 @@
 --- #YAML:1.0
 name:                Term-HiliteDiff
-version:             0.02
-abstract:            ~
+version:             0.03
+abstract:            Highlights differences in text with ANSI escape codes
 license:             ~
 generated_by:        ExtUtils::MakeMaker version 6.31
 distribution_type:   module
