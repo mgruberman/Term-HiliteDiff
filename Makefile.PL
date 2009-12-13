@@ -3,7 +3,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
     NAME          => 'Term::HiliteDiff',
-    AUTHOR        => 'Joshua ben Jore <twists@gmail.com>',
+    AUTHOR        => 'Josh ben Jore <jjore@cpan.org>',
     VERSION_FROM  => 'lib/Term/HiliteDiff.pm',
     ABSTRACT_FROM => 'lib/Term/HiliteDiff.pod',
     PL_FILES      => {},
