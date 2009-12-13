@@ -133,19 +133,27 @@ You can also look for information at:
 
 Josh ben Jore, C<< <jjore@cpan.org> >>
 
-=end emacs
+=head1 COPYRIGHT AND LICENCE
+
+Copyright (C) 2006,2009 Joshua ben Jore.
+
+This program is distributed WITHOUT ANY WARRANTY, including but not
+limited to the implied warranties of merchantability or fitness for a
+particular purpose.
+
+The program is free software.  You may distribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation (either version 2 or any later version) and
+the Perl Artistic License as published by O'Reilly Media, Inc.  Please
+open the files named Copying and Artistic for a copy of these
+licenses.
+
+=begin emacs
 
 ## Local Variables:
 ## mode: pod
 ## mode: auto-fill
 ## End:
 
-=begin emacs
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2006 Josh ben Jore, All Rights Reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=end emacs
 
