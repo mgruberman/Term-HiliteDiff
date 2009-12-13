@@ -11,6 +11,7 @@ WriteMakefile(
         'Maketest.PL' => 'Maketest',
     },
     PREREQ_PM     => {
+        # Runtime
         strict            => 0,
         vars              => 0,
         Exporter          => 0,
