@@ -1,7 +1,7 @@
 package Term::HiliteDiff;
 
 use strict;
-use vars qw( $VERSION @EXPORT_OK %EXPORT_TAGS );
+use vars qw( $VERSION @EXPORT_OK %EXPORT_TAGS $DEFAULTOBJ );
 use Term::HiliteDiff::_impl ();
 
 $VERSION = '0.03';
@@ -20,7 +20,7 @@ if ( $0 eq '-e' ) {
 
 # Here are some convenience functions for pretending this module isn't
 # object oriented.
-my $DEFAULTOBJ = __PACKAGE__->new;
+$DEFAULTOBJ = __PACKAGE__->new;
 
 sub hilite_diff {
     return $DEFAULTOBJ->hilite_diff(@_);
