@@ -1,86 +1,18 @@
 #!perl -w
-use Test::More tests => 10;
+use Test::More tests => 4;
 use lib 't/lib';
 use Test::IsEscapes qw( isq );
-use Term::HiliteDiff qw( watch );
+use Term::HiliteDiff;
 
-isq( watch( 'xxx
-xxx
-xxx
-' ), "\e[sxxx
-xxx
-xxx
-", 'xxx.xxx.xxx' );
+my $d = Term::HiliteDiff->new;
+isq( $d->watch('xxx xxx xxx'), "\e[sxxx xxx xxx", 'xxx xxx xxx' );
+isq( $d->watch('xxx xxx AAA'), "\e[uxxx xxx \e[7mAAA\e[0m\e[K", 'xxx xxx AAA' );
+isq( $d->watch('xxx BBB xxx'), "\e[uxxx \e[7mBBB\e[0m \e[7mxxx\e[0m\e[K", 'xxx BBB xxx' );
+isq( $d->watch('CCC xxx xxx'), "\e[u\e[7mCCC\e[0m \e[7mxxx\e[0m xxx\e[K", 'CCC xxx xxx' );
 
-isq( watch( 'xxx
-xxx
-xxX
-' ), "\e[uxxx\e[K
-xxx\e[K
-xx\e[7mX\e[0m\e[K
-\e[K", 'xxx.xxx.xxX' );
+# TODO: test for needing to add \n\e[K entries to clear previously
+# printed but now empty lines
 
+# TODO: test that last line ends with \e[K
 
-isq( watch( 'xxx
-xxx
-xXx
-' ), "\e[uxxx\e[K
-xxx\e[K
-x\e[7mX\e[0mx\e[K
-\e[K", 'xxx.xxx.xXx' );
-
-isq( watch( 'xxx
-xxx
-Xxx
-' ), "\e[uxxx\e[K
-xxx\e[K
-\e[7mX\e[0mxx\e[K
-\e[K", 'xxx.xxx.Xxx' );
-
-isq( watch( 'xxx
-xxX
-xxx
-' ), "\e[uxxx\e[K
-xx\e[7mX\e[0m\e[K
-xxx\e[K
-\e[K", 'xxx.xxX.xxx' );
-
-isq( watch( 'xxx
-xXx
-xxx
-' ), "\e[uxxx\e[K
-x\e[7mX\e[0mx\e[K
-xxx\e[K
-\e[K", 'xxx.xXx.xxx' );
-
-isq( watch( 'xxx
-Xxx
-xxx
-' ), "\e[uxxx\e[K
-\e[7mX\e[0mxx\e[K
-xxx\e[K
-\e[K", 'xxx.Xxx.xxx' );
-
-isq( watch( 'xxX
-xxx
-xxx
-' ), "\e[uxx\e[7mX\e[0m\e[K
-xxx\e[K
-xxx\e[K
-\e[K", 'xxX.xxx.xxx' );
-
-isq( watch( 'xXx
-xxx
-xxx
-' ), "\e[ux\e[7mX\e[0mx\e[K
-xxx\e[K
-xxx\e[K
-\e[K", 'xXx.xxx.xxx' );
-
-isq( watch( 'Xxx
-xxx
-xxx
-' ), "\e[u\e[7mX\e[0mxx\e[K
-xxx\e[K
-xxx\e[K
-\e[K", 'Xxx.xxx.xxx' );
+# TODO: test that all lines run \e[K\n
