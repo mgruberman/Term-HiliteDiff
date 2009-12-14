@@ -7,9 +7,6 @@ WriteMakefile(
     AUTHOR        => 'Josh ben Jore <jjore@cpan.org>',
     VERSION_FROM  => 'lib/Term/HiliteDiff.pm',
     ABSTRACT_FROM => 'lib/Term/HiliteDiff.pod',
-    PL_FILES      => {
-        'Maketest.PL' => 'Maketest',
-    },
     PREREQ_PM     => {
         # Runtime
         strict            => 0,
