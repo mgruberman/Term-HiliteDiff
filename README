@@ -1,31 +1,143 @@
-Term-HiliteDiff
+NAME
+    Term::HiliteDiff - Highlights differences in text with ANSI escape codes
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+DESCRIPTION
+    Term::HiliteDiff prints or formats your input with the differences
+    highlighted. You can choose to update your display in place or let
+    things scroll past like following a log.
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it get an idea of the modules uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+    You can choose to parse things for Term::HiliteDiff or let it just do a
+    plain character-by-character diff. My favorites are doing diffs on CSV
+    or tab delimited data.
+
+    This module highlights differences between subsequent lines/records of
+    text. It was directly inspired by the --difference mode provided by the
+    watch(1) program on Linux.
+
+SYNOPSIS
+        # Prints a tab delimited file, with differences highlighted
+        use Term::HiliteDiff 'hilite_diff';
+        while ( <STDIN> ) {
+            hilite_diff( [ split /\t/ ] );
+        }
 
 INSTALLATION
+    To install this module, run the following commands:
 
-To install this module, run the following commands:
+        perl Makefile.PL
+        make
+        make test
+        make install
 
-    perl Makefile.PL
-    make
-    make test
-    make install
+CONSTRUCTOR
+    The "Term::HiliteDiff->new" constructor returns a new
+    Term::HiliteDiff::_obj object. It responds to the methods "->watch" and
+    "->hilite_diff".
 
+    hilite_diff( ARRAY REFERENCE )
+    hilite_diff( STRING, ... )
+        The "hilite_diff" function compares the previous input with the
+        current input and prints the new input on a new line with any
+        differences highlited.
+
+        This function accepts either a single array reference or a list of
+        strings. The difference is whether your input will be parsed or not.
+        There is no parsing with an array reference. Your strings are split
+        into characters if you pass in a list of strings.
+
+          while (<STDIN>) {
+              print hilite_diff( $_ );
+          }
+
+        In both cases the output joining the contents of your array
+        reference or the list of strings by the $, variable.
+
+          # Tab delimited input
+          $, = "\t";
+          while (<STDIN>) {
+              print hilite_diff( [ split /$,/ ] );
+          }
+
+        If this function is called in void context, the result will be
+        printed to the currently selected filehandle. In list or scalar
+        context the resultant string will just be returned.
+
+        Example 1:
+
+          # prints differences to STDERR
+          while (<STDIN>) {
+              print STDERR hilite_diff( $_ );
+          }
+
+        Example 2:
+
+          # prints differences to the default handle
+          while (<STDIN>) {
+              hilite_diff( $_ );
+          }
+
+    watch( ARRAY REFERENCE )
+    watch( STRING, ... )
+        This function operates just like "hilite_diff" with the exception
+        that it attempts to always write its output over the same portion of
+        screen real estate. This allows you to have output that continually
+        refreshes in place.
+
+        I wrote this variant of "hilite_diff" so I could follow the changes
+        inside a repeating data structure.
+
+          # Watch 'a' increment inside the structure.
+          use Data::Dumper 'Dumper';
+          my @array = ( 1, 'a', 3 );
+          while ( 1 ) {
+              ++ $array[1]
+              watch( Dumper( \ @array ) );
+          }
+
+AUTOMATIC EXPORTS
+    The "watch" and "hilite_diff" functions are exported when you've used
+    this module from the command line.
+
+      perl -MTerm::HiliteDiff -pe '$_ = hilite_diff( $_ )'
+
+DEPENDENCIES
+    strict, vars, Exporter, Algorithm::Diff, Test::More, ExtUtils::MakeMaker
+
+SUPPORT AND DOCUMENTATION
+    After installing, you can find documentation for this module with the
+    perldoc command.
+
+        perldoc Term::HiliteDiff
+
+    You can also look for information at:
+
+    RT, CPAN's request tracker
+    <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Term-HiliteDiff>
+    AnnoCPAN, Annotated CPAN documentation
+    <http://annocpan.org/dist/Term-HiliteDiff>
+    CPAN Ratings <http://cpanratings.perl.org/d/Term-HiliteDiff>
+    Search CPAN <http://search.cpan.org/dist/Term-HiliteDiff>
+
+AUTHOR
+    Josh ben Jore, "<jjore@cpan.org>"
 
 COPYRIGHT AND LICENCE
+    Copyright (C) 2006,2009 Joshua ben Jore.
 
-Put the correct copyright and licence information here.
+    This program is distributed WITHOUT ANY WARRANTY, including but not
+    limited to the implied warranties of merchantability or fitness for a
+    particular purpose.
 
-Copyright (C) 2006 Joshua ben Jore
+    The program is free software. You may distribute it and/or modify it
+    under the terms of the GNU General Public License as published by the
+    Free Software Foundation (either version 2 or any later version) and the
+    Perl Artistic License as published by O'Reilly Media, Inc. Please open
+    the files named Copying and Artistic for a copy of these licenses.
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+POD ERRORS
+    Hey! The above document had some coding errors, which are explained
+    below:
+
+    Around line 109:
+        You forgot a '=back' before '=head1'
+
