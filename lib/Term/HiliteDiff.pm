@@ -32,9 +32,7 @@ sub watch {
 
 # Hey, a class constructor.
 sub new {
-    my ( $class ) = @_;
-
-    return bless [], "${class}::_impl";
+    return Term::HiliteDiff::_impl->new;
 }
 
 # Blatantly copied this from errantstory.com

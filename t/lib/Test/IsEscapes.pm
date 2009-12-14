@@ -13,7 +13,7 @@ sub isq ($$;$) {
     my $name     = $_[2];
 
     for ( $got, $expected ) {
-        s/\n/\\cJ/g;
+        s/\n/\\n/g;
         s/\e/\\e/g;
     }
 
