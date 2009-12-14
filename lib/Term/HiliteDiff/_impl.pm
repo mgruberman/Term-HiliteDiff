@@ -182,4 +182,8 @@ sub _do_watch {
     }
 }
 
-q[Wow, you're pretty uptight for a guy who worships a multi-armed, hermaphrodite embodiment of destruction who has a fetish for vaguely phallic shaped headgear.];
+q[
+  Wow, you're pretty uptight for a guy who worships a multi-armed,
+  hermaphrodite embodiment of destruction who has a fetish for vaguely
+  phallic shaped headgear.
+];
