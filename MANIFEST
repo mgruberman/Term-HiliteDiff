@@ -5,7 +5,6 @@ lib/Term/HiliteDiff.pm
 lib/Term/HiliteDiff.pod
 lib/Term/HiliteDiff/_impl.pm
 Makefile.PL
-Maketest.PL
 MANIFEST
 META.yml
 README
