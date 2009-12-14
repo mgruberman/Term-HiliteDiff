@@ -146,7 +146,7 @@ Josh ben Jore, C<< <jjore@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENCE
 
-Copyright (C) 2006,2009 Joshua ben Jore.
+Copyright (C) 2006,2007,2009 Joshua ben Jore.
 
 This program is distributed WITHOUT ANY WARRANTY, including but not
 limited to the implied warranties of merchantability or fitness for a
