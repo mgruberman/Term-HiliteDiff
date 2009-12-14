@@ -106,6 +106,8 @@ inside a repeating data structure.
       watch( Dumper( \ @array ) );
   }
 
+=back
+
 =head1 AUTOMATIC EXPORTS
 
 The C<watch> and C<hilite_diff> functions are exported when you've
