@@ -1,7 +1,7 @@
 package Term::HiliteDiff::_impl;
 use strict;
 use Algorithm::Diff ();
-use Carp 'carp';
+use Carp ();
 
 use constant TOKENS => 0;
 use constant LINES  => 1;
@@ -84,8 +84,7 @@ sub watch {
         }
         else {
             print $string
-                or carp
-                "Couldn't write to the currently selected filehandle: $!";
+                or Carp::carp( "Can't write: $!" );
             return;
         }
     }
@@ -148,7 +147,7 @@ sub watch {
     }
     else {
         print $out
-            or carp "Couldn't write to the currently selected filehandle: $!";
+            or Carp::carp( "Couldn't write to the currently selected filehandle: $!" );
     }
 }
 
