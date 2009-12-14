@@ -32,7 +32,7 @@ sub watch {
 
 # Hey, a class constructor.
 sub new {
-    my $class = shift @_;
+    my ( $class ) = @_;
 
     return bless [], "${class}::_impl";
 }
