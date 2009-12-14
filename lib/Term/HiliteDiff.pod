@@ -25,6 +25,15 @@ the watch(1) program on Linux.
         hilite_diff( [ split /\t/ ] );
     }
 
+=head1 INSTALLATION
+
+To install this module, run the following commands:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
 =head1 CONSTRUCTOR
 
 The C<< Term::HiliteDiff->new >> constructor returns a new
