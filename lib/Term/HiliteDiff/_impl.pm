@@ -3,9 +3,9 @@ use strict;
 use Algorithm::Diff ();
 use Carp ();
 
-use constant TOKENS => 0;
-use constant LINES  => 1;
-use constant _do_positioning => 2;
+use constant _prev_tokens         => 0;
+use constant _do_positioning => 1;
+use constant _line_count     => 2;
 
 # This library uses the following ANSI escape codes
 # \e[s   Save a cursor position
@@ -59,7 +59,7 @@ sub _do_watch {
 
     # *if* I haven't started a diff already, then I start one and
     # finish early.
-    if ( ! $self->[TOKENS] ) {
+    if ( ! $self->[_prev_tokens] ) {
 
         # \e[s instructs the terminal to save the cursor
         # position. I'll use this later with \e[u to restore the
@@ -78,7 +78,7 @@ sub _do_watch {
         # many lines there are. I'll need to know how many lines there
         # are so I can make sure to clear them all and not leave
         # trailing bits around.
-        $self->[TOKENS] = \@tokens;
+        $self->[_prev_tokens] = \@tokens;
         if ( $self->[_do_positioning] ) {
             $self->[_cnt_lines] = $string =~ tr/\n/\n/;
         }
@@ -98,8 +98,8 @@ sub _do_watch {
     # one. Once I have the diff, I don't need to keep my copy of the
     # previous stream. I'll just be querying $diff to see what's
     # different or unchanged.
-    my $diff = Algorithm::Diff->new( \@tokens, $self->[TOKENS] );
-    $self->[TOKENS] = \@tokens;
+    my $diff = Algorithm::Diff->new( \@tokens, $self->[_prev_tokens] );
+    $self->[_prev_tokens] = \@tokens;
 
     my $out;
 
