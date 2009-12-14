@@ -102,6 +102,7 @@ sub _do_watch {
     $self->[_prev_tokens] = \@tokens;
 
     my $out;
+    my $started_joining;
 
     if ( $self->[_do_positioning] ) {
 
@@ -119,13 +120,19 @@ sub _do_watch {
     while ( $diff->Next ) {
         my @items;
         if ( @items = $diff->Same ) {
-            $out .= join '', splice @items;
+
+	    if ( $started_joining ) {
+		$out .= $separator;
+	    }
+
+            $out .= join $separator, splice @items;
+	    $started_joining = 1;
         }
         elsif ( @items = $diff->Items(1) ) {
 
             # \e[7m adds the reverse text mode. \e[0m clears all text
             # attributes.
-	    my $new_section = "\e[7m" . join( '', splice @items ) . "\e[0m";
+	    my $new_section = "\e[7m" . join( $separator, splice @items ) . "\e[0m";
 
 	    # Turn off highlighting when going over a new line
 	    $new_section =~ s/\n/\e\[0m\n\e\[7m/g;
@@ -133,7 +140,11 @@ sub _do_watch {
 	    # Remove empty highlighting
 	    $new_section =~ s/\e\[7m\e\[0m//g;
 
-            $out .= $new_section;
+            $out .=
+                $started_joining
+                ? "$separator$new_section"
+                : $new_section;
+	    $started_joining = 1;
         }
     }
 
