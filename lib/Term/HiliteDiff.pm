@@ -37,5 +37,6 @@ sub new {
     return bless [], "${class}::_impl";
 }
 
-# This quote is blatantly copied from Michael Poe of errantstory.com.
-q[What's the point of dreaming I'm a girl if I don't get a cool lesbian scene?!]
+# Blatantly copied this from errantstory.com
+q[What's the point of dreaming I'm a girl if I don't get a cool lesbian scene?!];
+
