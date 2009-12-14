@@ -80,7 +80,7 @@ sub _do_watch {
         # trailing bits around.
         $self->[_prev_tokens] = \@tokens;
         if ( $self->[_do_positioning] ) {
-            $self->[_cnt_lines] = $string =~ tr/\n/\n/;
+            $self->[_line_count] = $string =~ tr/\n/\n/;
         }
 
         # Do something sane if called in void or not-void contexts.
@@ -152,13 +152,13 @@ sub _do_watch {
     # Count the # of lines that aren't in this output that were in the
     # previous output. I'll need to clear those out.
     if ( $self->[_do_positioning] ) {
-        my $this_cnt_lines = $out =~ tr/\n//;
-        my $slack_cnt_lines = $self->[_cnt_lines] - $this_cnt_lines;
-        $self->[_cnt_lines] = $this_cnt_lines;
+        my $this_line_count = $out =~ tr/\n//;
+        my $slack_line_count = $self->[_line_count] - $this_line_count;
+        $self->[_line_count] = $this_line_count;
 
-        if ( $slack_cnt_lines > 0 ) {
+        if ( $slack_line_count > 0 ) {
 
-            # Add $slack_cnt_lines number of blank lines with
+            # Add $slack_line_count number of blank lines with
             # instructions to clear things out. I'm wondering slightly
             # if it isn't wrong to do \n before \e[K. \e[K instructs
             # the terminal to delete everything else on a line after
@@ -167,8 +167,8 @@ sub _do_watch {
             #
             # I'm not sure why I have 1+ here. I must have needed but the
             # logic doesn't sound right.
-	    ++ $slack_cnt_lines;
-            $out .= "\n\e[K" x $slack_cnt_lines;
+	    ++ $slack_line_count;
+            $out .= "\n\e[K" x $slack_line_count;
         }
     }
 
