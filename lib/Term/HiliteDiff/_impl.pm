@@ -64,18 +64,20 @@ sub _parse_input {
 sub _color {
     # Arguments:
     #  0: input hunk
-    #  1: ANSI color code
-    #  2: redraw mode?
 
     # Color the region
     no warnings 'uninitialized';
-    my $val = "\e[$_[1]m$_[0]\e[0m";
+    my $val = "\e[7m$_[0]\e[0m";
 
     # Turn off coloring over newlines
-    $val =~ s/\n/\e[0m\n\e[$_[1]m/g;
+    if ( -1 != index $val, "\n" ) {
+	$val =~ s/\n/\e[0m\n\e[7m/g;
+    }
 
     # Remove empty colored regions
-    $val =~ s/\e\[$_[1]m\e\[0m//g;
+    if ( -1 != index $val, "\e[7m\e[0m" ) {
+	$val =~ s/\e\[7m\e\[0m//g;
+    }
 
     return $val;
 }
@@ -96,18 +98,23 @@ sub _sdiff {
         ? $prev_max_index
         : $new_max_index;
 
-    my @sdiff;
-    $#sdiff = $max_index;
+    my @sdiff = (undef) x (1 + $max_index);
     for my $idx ( 0 .. $max_index ) {
 
 	no warnings 'uninitialized';
         if ( $_[0][$idx] eq $_[1][$idx] ) {
-	    $sdiff[$idx] = $_[1][$idx];
+	    $sdiff[$idx] =
+                defined $_[1][$idx]
+                ? $_[1][$idx]
+                : '';
+	}
+	elsif ( length $_[1][$idx] ) {
+	    $sdiff[$idx] = _color( $_[1][$idx] );
 	}
 	else {
-	    $sdiff[$idx] = _color( $_[1][$idx], 7, $_[2] );
+	    # This was changed but it's empty so there's nothing to color.
+	    $sdiff[$idx] = '';
 	}
-	$sdiff[$idx] = '' unless defined $sdiff[$idx];
     }
     
     return \ @sdiff;

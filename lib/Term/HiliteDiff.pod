@@ -20,9 +20,20 @@ the watch(1) program on Linux.
 =head1 SYNOPSIS
 
     # Prints a tab delimited file, with differences highlighted
-    use Term::HiliteDiff 'hilite_diff';
+    use Term::HiliteDiff;
+    my $differ = Term::HiliteDiff->new;
     while ( <STDIN> ) {
-        hilite_diff( [ split /\t/ ] );
+        chomp;
+        my @columns = split /\t/, $_, -1;
+        my $diff = $differ->hilite_diff( \ @columns );
+        print join( "\t", @$diff ), "\n";
+    }
+
+OR as functions
+
+    use Term::HiliteDiff qw( hilite_diff );
+    while ( <STDIN> ) {
+        hilite_diff( ... )
     }
 
 =head1 INSTALLATION
