@@ -31,7 +31,6 @@ WriteMakefile1(
         strict            => 0,
         vars              => 0,
         Exporter          => 0,
-
     },
     LICENSE => 'perl',
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
