@@ -1,6 +1,5 @@
 package Term::HiliteDiff::_impl;
 use strict;
-use Carp ();
 
 use constant _previous_input => 0;
 sub new {
@@ -166,17 +165,7 @@ sub _do_diff {
     # Save our "previous" state into the object
     $_[0][_previous_input] = $input;
 
-
-    # Contextual return:
-    #                  | Input type                 |                            |
-    # Calling context: | Pre-parsed array           | String                     |
-    # -----------------+----------------------------+----------------------------+
-    # list             | \ @diff                    | join w/ $separator         |
-    # -----------------+----------------------------+----------------------------+
-    # scalar           | \ @diff                    | join w/ $separator         |
-    # -----------------+----------------------------+----------------------------+
-    # void             | print + join w/ $separator | print + join w/ $separator |
-    if ( $array_mode && defined wantarray ) {
+    if ( $array_mode ) {
 
 	if ( $_[2] ) {
 	    for ( @$sdiff ) {
@@ -199,13 +188,7 @@ sub _do_diff {
 	    $output =~ s/(?<!\e\[K)\z/\e[K/;
 	}
 
-	if ( defined wantarray ) {
-	    return $output;
-	}
-	else {
-	    print $output
-		or Carp::carp( "Can't write: $!" );
-	}
+	return $output;
     }
 }
 
