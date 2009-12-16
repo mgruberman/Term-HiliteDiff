@@ -20,7 +20,6 @@ WriteMakefile(
         strict            => 0,
         vars              => 0,
         Exporter          => 0,
-        'Algorithm::Diff' => 0,
 
         # Only for testing
         'Test::More' => 0,
