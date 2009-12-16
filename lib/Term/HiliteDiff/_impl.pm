@@ -133,9 +133,8 @@ sub _do_diff {
         );
 
     # Fetch previous input
-    my $prev_input =
-        $_[0][_previous_input]
-        || $input;
+    my $prev_input = $_[0][_previous_input];
+    $prev_input ||= $input;
 
     # Diff it
     my $sdiff = _sdiff(
