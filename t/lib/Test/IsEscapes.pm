@@ -15,6 +15,7 @@ sub isq ($$;$) {
     for ( $got, $expected ) {
         s/\n/\\n/g;
         s/\e/\\e/g;
+        s/\t/\\t/g;
     }
 
     &main::is( $got, $expected, $name );
