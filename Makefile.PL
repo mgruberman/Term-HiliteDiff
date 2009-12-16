@@ -3,6 +3,8 @@ use 5.005;
 use strict;
 use ExtUtils::MakeMaker;
 BEGIN {
+    # Provides "make testcover" if you have
+    # ExtUtils::MakeMaker::Coverage installed
     eval {
 	require ExtUtils::MakeMaker::Coverage;
 	ExtUtils::MakeMaker::Coverage->import;
