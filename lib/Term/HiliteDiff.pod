@@ -7,7 +7,7 @@ Term::HiliteDiff - Highlights differences in text with ANSI escape codes
 
 Term::HiliteDiff prints or formats your input with the differences
 highlighted. You can choose to update your display in place or let
-things scroll past like following a log.
+things scroll past like tailing a log.
 
 You can choose to parse things for Term::HiliteDiff or let it just do
 a plain character-by-character diff. My favorites are doing diffs on
@@ -22,18 +22,19 @@ the watch(1) program on Linux.
     # Prints a tab delimited file, with differences highlighted
     use Term::HiliteDiff;
     my $differ = Term::HiliteDiff->new;
-    while ( <STDIN> ) {
+    while ( <> ) {
         chomp;
-        my @columns = split /\t/, $_, -1;
-        my $diff = $differ->hilite_diff( \ @columns );
-        print join( "\t", @$diff ), "\n";
+        print
+            join "\t",
+                @{ $differ->hilite_diff( [ split /\t/, $_, -1 ] ) },
+                "\n";
     }
 
 OR as functions
 
     use Term::HiliteDiff qw( hilite_diff );
-    while ( <STDIN> ) {
-        hilite_diff( ... )
+    while ( <> ) {
+        hilite_diff( [split /\t/] )
     }
 
 =head1 INSTALLATION
@@ -48,27 +49,28 @@ To install this module, run the following commands:
 =head1 CONSTRUCTOR
 
 The C<< Term::HiliteDiff->new >> constructor returns a new
-L<Term::HiliteDiff::_obj> object. It responds to the methods C<<
-->watch >> and C<< ->hilite_diff >>.
+C<Term::HiliteDiff::_impl> object. It responds to the methods
+C<-E<gt>watch> and C<-E<gt>hilite_diff>.
 
 =over 
 
-=item hilite_diff( ARRAY REFERENCE )
+=item obj-E<gt>hilite_diff( ARRAY REFERENCE )
 
-=item hilite_diff( STRING, ... )
+=item obj-E<gt>hilite_diff( STRING )
 
-The C<hilite_diff> function compares the previous input with the
-current input and prints the new input on a new line with any
-differences highlited.
+The C<hilite_diff> method compares the previous input with the current
+input and returns or prints the new input with any differences
+highlited.
 
-This function accepts either a single array reference or a list of
-strings. The difference is whether your input will be parsed or
-not. There is no parsing with an array reference. Your strings are
-split into characters if you pass in a list of strings.
+It accepts either a single array reference or a strings. The
+difference is whether your input will be parsed or not. There is no
+parsing with an array reference. Strings are split by tabs, pipes, new
+lines, or generic whitespace.
 
   while (<STDIN>) {
       print hilite_diff( $_ );
   }
+
 
 In both cases the output joining the contents of your array reference
 or the list of strings by the C<$,> variable.
