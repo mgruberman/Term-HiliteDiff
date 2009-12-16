@@ -2,6 +2,13 @@
 use 5.005;
 use strict;
 use ExtUtils::MakeMaker;
+BEGIN {
+    eval {
+	require ExtUtils::MakeMaker::Coverage;
+	ExtUtils::MakeMaker::Coverage->import;
+	1;
+    };
+}
 
 WriteMakefile(
     NAME          => 'Term::HiliteDiff',
