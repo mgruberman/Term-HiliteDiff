@@ -69,14 +69,10 @@ sub _color {
     my $val = "\e[7m$_[0]\e[0m";
 
     # Turn off coloring over newlines
-    if ( -1 != index $val, "\n" ) {
-	$val =~ s/\n/\e[0m\n\e[7m/g;
-    }
+    $val =~ s/\n/\e[0m\n\e[7m/g;
 
     # Remove empty colored regions
-    if ( -1 != index $val, "\e[7m\e[0m" ) {
-	$val =~ s/\e\[7m\e\[0m//g;
-    }
+    $val =~ s/\e\[7m\e\[0m//g;
 
     return $val;
 }
