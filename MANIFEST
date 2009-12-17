@@ -1,14 +1,17 @@
 Artistic
 Changes
 Copying
+eg/profile.pl
+eg/profile.sh
 lib/Term/HiliteDiff.pm
 lib/Term/HiliteDiff.pod
 lib/Term/HiliteDiff/_impl.pm
 Makefile.PL
-MANIFEST
-META.yml
+MANIFEST			This list of files
+MANIFEST.SKIP
 README
-t/10basic.t
+t/14hilite_diff.t
+t/14watch.t
 t/15hilite_diff.t
 t/15watch.t
 t/16hilite_diff.t
