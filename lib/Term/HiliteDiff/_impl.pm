@@ -53,7 +53,7 @@ sub _parse_input {
         return [ split /\|/, $_[2], -1 ], '|';
     }
     elsif ( $_[2] =~ /\n(?!\z)/ ) {
-	return [ split /\n/, $_[2], -1 ], "\e[K\n";
+	return [ split /\n/, $_[2], -1 ], "\n";
     }
     else {
         return [ split ' ', $_[2], -1 ], ' ';
