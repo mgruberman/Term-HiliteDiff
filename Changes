@@ -22,3 +22,7 @@ Revision history for Term-HiliteDiff
 
 0.07    Sun Dec 14, 2009
         Fixed pre-parse mode
+
+0.08    Tue Dec 16, 2009
+        Fixed lots of tests
+        Dropped the auto-print feature
