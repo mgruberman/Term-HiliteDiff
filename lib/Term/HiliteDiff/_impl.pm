@@ -178,9 +178,11 @@ sub _do_diff {
 	    @$sdiff;
 
 	if ( $_[2] ) {
-	    $output =~ s/(?<!\e\[K)(?=\n)/\e[K/g;
-	    $output =~ s/(?<=\e\[K)(?:\e\[K)+//g;
-	    $output =~ s/(?<!\e\[K)\z/\e[K/;
+            for ( $output ) {
+		s/(?<!\e\[K)(?=\n)/\e[K/g;
+		s/(?<=\e\[K)(?:\e\[K)+//g;
+                s/(?<!\e\[K)\z/\e[K/;
+            }
 	}
 
 	return $output;
