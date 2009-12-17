@@ -166,8 +166,8 @@ sub _do_diff {
 	    for ( @$sdiff ) {
 		s/(?<!\e\[K)(?=\n)/\e[K/g;
 		s/(?<=\e\[K)(?:\e\[K)+//g;
+                s/(?<!\e\[K)\z/\e[K/;
 	    }
-	    $sdiff->[-1] =~ s/(?<!\e\[K)\z/\e[K/;
 	}
 
 	return $sdiff;
