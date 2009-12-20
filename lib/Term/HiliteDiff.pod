@@ -1,4 +1,3 @@
-
 =head1 NAME
 
 Term::HiliteDiff - Highlights differences in text with ANSI escape codes
@@ -9,13 +8,12 @@ Term::HiliteDiff prints or formats your input with the differences
 highlighted. You can choose to update your display in place or let
 things scroll past like tailing a log.
 
-You can choose to parse things for Term::HiliteDiff or let it just do
-a plain character-by-character diff. My favorites are doing diffs on
-CSV or tab delimited data.
+You can choose to let it attempt to parse the columns out of your data
+or just pass an array reference in.
 
-This module highlights differences between subsequent lines/records of
-text. It was directly inspired by the --difference mode provided by
-the watch(1) program on Linux.
+It highlights differences between subsequent lines/records of text. It
+was directly inspired by the --difference mode provided by the
+watch(1) program on Linux.
 
 =head1 SYNOPSIS
 
@@ -23,18 +21,20 @@ the watch(1) program on Linux.
     use Term::HiliteDiff;
     my $differ = Term::HiliteDiff->new;
     while ( <> ) {
-        chomp;
-        print
-            join "\t",
-                @{ $differ->hilite_diff( [ split /\t/, $_, -1 ] ) },
-                "\n";
+        my $line = [ split /\t/, $_, -1 ];
+        my $diff = $differ->hilite_diff( $line );
+
+        print join "\t", @$diff;
     }
 
 OR as functions
 
     use Term::HiliteDiff qw( hilite_diff );
     while ( <> ) {
-        hilite_diff( [split /\t/] )
+        my $line = [ split /\t/, $_, -1 ];
+        my $diff = hilite_diff( $line );
+
+        print $diff
     }
 
 =head1 INSTALLATION
@@ -46,91 +46,180 @@ To install this module, run the following commands:
     make test
     make install
 
-=head1 CONSTRUCTOR
+=head1 INPUT
 
-The C<< Term::HiliteDiff->new >> constructor returns a new
-C<Term::HiliteDiff::_impl> object. It responds to the methods
-C<-E<gt>watch> and C<-E<gt>hilite_diff>.
+It accepts either a single array reference or a string. There is no
+parsing with an array reference. Strings are split by tabs, pipes, or
+lines.
 
-=over 
+=over
 
-=item obj-E<gt>hilite_diff( ARRAY REFERENCE )
+=item No interpretation
 
-=item obj-E<gt>hilite_diff( STRING )
+    use Term::HiliteDiff;
+    $obj = Term::HiliteDiff->new;
 
-The C<hilite_diff> method compares the previous input with the current
-input and returns or prints the new input with any differences
-highlited.
+    for ( [qw[ Josh Jore jjore@cpan.org ]],
+          [qw[ Josh JORE jjore@cpan.org ]],
+    ) {
+        $diff = $obj->hilite_diff( $_ );
+        print join( "\t", @$diff ), "\n";
+    }
 
-It accepts either a single array reference or a strings. The
-difference is whether your input will be parsed or not. There is no
-parsing with an array reference. Strings are split by tabs, pipes, new
-lines, or generic whitespace.
+=item Split by tabs
 
-  while (<STDIN>) {
-      print hilite_diff( $_ );
-  }
+It's OK if there's a newline at the end of your input.
 
+    use Term::HiliteDiff;
+    $obj = Term::HiliteDiff->new;
 
-In both cases the output joining the contents of your array reference
-or the list of strings by the C<$,> variable.
+    for ( "Josh\tJore\tjjore\@cpan.org\n",
+          "Josh\tJORE\tjjore\@cpan.org\n",
+    ) {
+        print $obj->hilite_diff( $_ );
+    }
 
-  # Tab delimited input
-  $, = "\t";
-  while (<STDIN>) {
-      print hilite_diff( [ split /$,/ ] );
-  }
+=item Split by pipes
 
-If this function is called in void context, the result will be printed
-to the currently selected filehandle. In list or scalar context the
-resultant string will just be returned.
+    use Term::HiliteDiff;
+    $obj = Term::HiliteDiff->new;
 
-Example 1:
+    for ( "Josh|Jore|jjore\@cpan.org\n",
+          "Josh|JORE|jjore\@cpan.org\n",
+    ) {
+        print $obj->hilite_diff( $_ );
+    }
 
-  # prints differences to STDERR
-  while (<STDIN>) {
-      print STDERR hilite_diff( $_ );
-  }
+=item Split by lines
 
-Example 2:
+    use Term::HiliteDiff;
+    $obj = Term::HiliteDiff->new;
 
-  # prints differences to the default handle
-  while (<STDIN>) {
-      hilite_diff( $_ );
-  }
+    print $obj->hilite_diff( <<STRING );
+        fname=Josh
+        lname=Jore
+        email=jjore@cpan.org
+    STRING
+    print $obj->hilite_diff( <<STRING );
+        fname=Josh
+        lname=JJORE
+        email=jjore@cpan.org
+    STRING
 
-=item watch( ARRAY REFERENCE )
+=item Split by any 'ole words
 
-=item watch( STRING, ... )
+    use Term::HiliteDiff;
+    $obj = Term::HiliteDiff->new;
 
-This function operates just like C<hilite_diff> with the exception
-that it attempts to always write its output over the same portion of
-screen real estate. This allows you to have output that continually
-refreshes in place.
+    for ( "Singing dang fol dee dido\n",
+          "Singing dang fol dee day\n",
+    ) {
+        print $obj->hilite_diff( $_ );
+    }
 
-I wrote this variant of C<hilite_diff> so I could follow the changes
-inside a repeating data structure.
+=back
 
-  # Watch 'a' increment inside the structure.
-  use Data::Dumper 'Dumper';
-  my @array = ( 1, 'a', 3 );
-  while ( 1 ) {
-      ++ $array[1]
-      watch( Dumper( \ @array ) );
-  }
+=head1 OUTPUT
+
+Both the C<hilite_diff> and C<watch> method/functions return the
+output in the same format as the input. If you passed in an array, you
+get an array back but if you passed in something like a tab-delimited
+string, the output is going to be formatted that way too.
+
+    watch( \@input) }; # Array!
+    watch( " \t " )  ; # Tabs!
+    watch( ' | ' )   ; # Pipes!
+    watch( " \n " )  ; # Lines!
+
+Each column's value is compared to the previous value of the same
+column. Changed values are marked up.
+
+Presently the only mark-up is to use the "reverse hilighting". If these
+two rows were marked up then the middle value C<JORE> would be
+hilighted with reverse text.
+
+  # The middle column!
+  Josh | Jore | jjore@cpan.org
+  Josh | JORE | jjore@cpan.org
+
+=head2 SCROLLING OUTPUT - hilite_diff
+
+=over
+
+=item $obj-E<gt>hilite_diff( ARRAY )
+
+=item $obj-E<gt>hilite_diff( TAB DELIMITED STRING )
+
+=item $obj-E<gt>hilite_diff( PIPE DELIMITED STRING )
+
+=item $obj-E<gt>hilite_diff( MULTI-LINE STRING )
+
+=item $obj-E<gt>hilite_diff( ANY 'OLE WORDS )
+
+For output that scrolls past and merely annotated, use
+C<hilite_diff>. Your input is left pretty much unchanged.
+
+=back
+
+=head2 REDRAWING OUTPUT
+
+=over
+
+=item $obj-E<gt>hilite_diff( ARRAY )
+
+=item $obj-E<gt>hilite_diff( TAB DELIMITED STRING )
+
+=item $obj-E<gt>hilite_diff( PIPE DELIMITED STRING )
+
+=item $obj-E<gt>hilite_diff( MULTI-LINE STRING )
+
+=item $obj-E<gt>hilite_diff( ANY 'OLE WORDS )
+
+For output that updates in place, use C<watch>. The watch
+method/function tags the first thing it sees with an ANSI code to save
+the current cursor position and then tags all later output with
+another ANSI escape code to jump back to the previous position.
+
+I've used this when watching a stream of screen-sized chunks of data
+go by that were largely identical so I just wanted the changes
+annotated but I didn't really want the screen to scroll upwards.
+
+C<watch> will also use a line-erasing escape code to ensure that
+whenever newlines are printed that any printed clutter is being
+cleaned up.
+
+Consider:
+
+    use Data::Dumper qw( Dumper );
+    use Term::HiliteDiff qw( watch );
+    $Data::Dumper::Sortkeys = 1;
+
+    @thingies = (
+        { a => 1, b => 2, c => 3 },
+        { a => 1,       , c => 3 },
+        { a => 1, b => 2, c => 3 },
+        { a => 1, b => 2,        },
+    );
+    $obj = Term::HiliteDiff->new;
+
+    for my $thingie ( @thingies ) {
+        print $obj->watch( Data::Dumper::Dumper( $thingie ) );
+    }
 
 =back
 
 =head1 AUTOMATIC EXPORTS
 
-The C<watch> and C<hilite_diff> functions are exported when you've
-used this module from the command line.
+The C<watch> and C<hilite_diff> convenience functions are exported
+when you've used this module from the command line. I think possibly
+there ought to be an App::??? module to wrap these easy command-line
+things up.
 
-  perl -MTerm::HiliteDiff -pe '$_ = hilite_diff( $_ )'
+    perl -MTerm::HiliteDiff -pe '$_ = hilite_diff( $_ )'
 
 =head1 DEPENDENCIES
 
-strict, vars, Exporter, Algorithm::Diff, Test::More, ExtUtils::MakeMaker
+strict, vars, Exporter, Test::More, ExtUtils::MakeMaker
 
 =head1 SUPPORT AND DOCUMENTATION
 
@@ -180,4 +269,3 @@ licenses.
 ## End:
 
 =end emacs
-
