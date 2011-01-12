@@ -29,3 +29,8 @@ Revision history for Term-HiliteDiff
 
 0.09    Sat Dec 19, 2009
         Revamped documentation
+
+0.10    Tests pass for perl-5.12.2
+        Use Dist::Zilla
+        Remove `no warnings' for 5.005 compatibility
+
